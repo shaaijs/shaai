@@ -1,6 +1,6 @@
 {
-  "name": "shaai",
-  "version": "1.0.0",
+  "name": "@shaai/core",
+  "version": "0.1.0",
   "description": "A blogging npm",
   "main": "dist/es5/lib/index.js",
   "preferGlobal": true,
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shaaijs/shaai.git"
+    "url": "git+https://github.com/shaaijs/core.git"
   },
   "keywords": [
     "shaai",
@@ -21,9 +21,9 @@
   "author": "mohkay",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shaaijs/shaai/issues"
+    "url": "https://github.com/shaaijs/core/issues"
   },
-  "homepage": "https://github.com/shaaijs/shaai#readme",
+  "homepage": "https://github.com/shaaijs/core#readme",
   "dependencies": {
     "medium-json-feed": "0.0.3"
   },
@@ -31,5 +31,8 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "rimraf": "^2.6.3"
+  },
+  "directories": {
+    "lib": "lib"
   }
 }
