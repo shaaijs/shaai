@@ -12,11 +12,17 @@ var Shaai = function () {
     function Shaai(options) {
         _classCallCheck(this, Shaai);
 
-        configurator(options);
-        this.instantiate();
+        this.config(options);
     }
 
     _createClass(Shaai, [{
+        key: 'config',
+        value: function config(options) {
+            if (!options) return;
+            configurator(options);
+            this.instantiate();
+        }
+    }, {
         key: 'instantiate',
         value: function instantiate() {
             this.getBlogs = getters.getBlogs;
