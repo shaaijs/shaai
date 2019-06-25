@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/shaaijs/core#readme",
   "dependencies": {
-    "axios": "^0.19.0"
+    "axios": "^0.19.0",
+    "markdown": "^0.5.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
