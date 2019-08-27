@@ -4,6 +4,20 @@ Core library containing data related functions.
 
 [![npm version](https://badge.fury.io/js/%40shaai%2Fcore.svg)](https://badge.fury.io/js/%40shaai%2Fcore)
 
+## Usage
+Shaai can be used in multiple ways, but the easiest one is to use `scrolls` to render blogs.
+
+```js
+//Vanilla JS
+npm install --save @shaai/scroll-ink
+
+//React
+npm install --save @shaai/scroll-ink @shaai/react
+```
+We suggest you read about the constituents of the framework below, but you can always skip and move to implementation directly. [_Read about usage in detail here_](https://github.com/shaaijs/scroll-ink#usage).
+
+[![IMAGE ALT TEXT HERE](https://i.imgur.com/Ebft2t0.png)](http://www.youtube.com/watch?v=VESOKt5-7yU)
+
 ## Introduction
 Shaai is a pluggable blogging setup which allows you to source your content from anywhere and display it the way you want. It aims to be modular in every aspect and allows you to use every piece of it the way you want.
 
@@ -27,18 +41,6 @@ Read more about scrolls and how to create your own scroll [here](https://github.
 
 ### 3. [Admin](https://shaai.herokuapp.com)
 This is the content management system for Shaai. You can manage your blogs here. The CMS can be [self hosted](https://github.com/shaaijs/admin#host-shaai-admin-on-heroku) on your server, or you can use [our hosted version](https://shaai.herokuapp.com) directly.
-
-## Usage
-Shaai can be used in multiple ways, but the easiest one is to use `scrolls` to render blogs.
-
-```js
-//Vanilla JS
-npm install --save @shaai/scroll-ink
-
-//React
-npm install --save @shaai/scroll-ink @shaai/react
-```
-We suggest you read about the constituents of the framework below, but you can always skip and move to implementation directly. [_Read about usage in detail here_](https://github.com/shaaijs/scroll-ink#usage).
 
 ## Roadmap
 Shaai was developed with many ambitious features in mind, but we have limited ourselves to the most crucial ones for the first release. Following are part of the framework roadmap:
