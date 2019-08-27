@@ -16,7 +16,7 @@ npm install --save @shaai/scroll-ink @shaai/react
 ```
 We suggest you read about the constituents of the framework below, but you can always skip and move to implementation directly. [_Read about usage in detail here_](https://github.com/shaaijs/scroll-ink#usage).
 
-[![IMAGE ALT TEXT HERE](https://i.imgur.com/Ebft2t0.png)](http://www.youtube.com/watch?v=VESOKt5-7yU)
+[![Setting up your first blog](https://i.imgur.com/Ebft2t0l.png)](http://www.youtube.com/watch?v=VESOKt5-7yU)
 
 ## Introduction
 Shaai is a pluggable blogging setup which allows you to source your content from anywhere and display it the way you want. It aims to be modular in every aspect and allows you to use every piece of it the way you want.
