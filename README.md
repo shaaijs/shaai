@@ -1,8 +1,8 @@
 ![](https://i.imgur.com/0RGDSPU.jpg)
-# @shaai/core
+# @shaai/core <span>&nbsp;</span> [![npm version](https://badge.fury.io/js/%40shaai%2Fcore.svg)](https://badge.fury.io/js/%40shaai%2Fcore)
 Core library containing data related functions.
 
-[![npm version](https://badge.fury.io/js/%40shaai%2Fcore.svg)](https://badge.fury.io/js/%40shaai%2Fcore)
+[Shaai Homepage](https://shaaijs.tech) • [Our blog, made in Shaai](https://shaaijs.tech/blog)
 
 ## Usage
 Shaai can be used in multiple ways, but the easiest one is to use `scrolls` to render blogs.
