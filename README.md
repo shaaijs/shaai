@@ -52,5 +52,5 @@ These are plugins for custom data transformation and injecting your own function
 
 ## Blogs made using Shaai
 
-[Shaai Blog](https://shaaijs.tech/blog)
+[Shaai Blog](https://shaaijs.tech/blog)\
 [Mohit's Blog](https://mohitkarekar.com/blog)
