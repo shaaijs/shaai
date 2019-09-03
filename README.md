@@ -49,3 +49,8 @@ These are the data sources for Shaai. In future, we plan to have several other d
 
 ### Nibs `@shaai/nib-*`
 These are plugins for custom data transformation and injecting your own functions into the `shaai` instance.
+
+## Blogs made using Shaai
+
+[Shaai Blog](https://shaaijs.tech/blog)
+[Mohit's Blog](https://mohitkarekar.com/blog)
