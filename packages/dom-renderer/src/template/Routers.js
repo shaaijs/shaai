@@ -29,13 +29,16 @@ class Router {
                 this.routes[r.path] = r
             }
         })
-        this.history.listen((location) => this.handleRoutes(location.pathname))
+        this.history.listen((location) => {
+            this.handleRoutes(this.config.history && this.config.basePath ? location.pathname.split(this.config.basePath)[1] : location.pathname)
+        })
         this.handleRoutes(this.config.basePath ? window.location.pathname.split(this.config.basePath)[1] : window.location.pathname)
     }
 
     handleRoutes(path) {
         const url = path || '/'
         const { routeResolved, params } = this.resolveRoute(url)
+        if(!routeResolved) return
         /*
             routeResolved has template, fetch
             Process:

@@ -10,8 +10,12 @@ export default (key) => {
                 events: [
                     {
                         name: 'click', 
-                        handler: (e, data) => {
-                            if(store.getData('currentPath') !== `/post/${data.publicUrl || data._id}`) history().push(`/post/${data.publicUrl || data._id}`)
+                        handler: (e, data, config) => {
+                            if(config.history && config.basePath) {
+                                if(store.getData('currentPath') !== `/post/${data.publicUrl || data._id}`) history().push(`${config.basePath}/post/${data.publicUrl || data._id}`)
+                            } else {
+                                if(store.getData('currentPath') !== `/post/${data.publicUrl || data._id}`) history().push(`/post/${data.publicUrl || data._id}`)
+                            }
                             window.scrollTo(0, 0)
                         }
                     }

@@ -1,62 +1,61 @@
-import ScrollInk from './../src'
-import config from './shaai.config'
+import history from './../history'
+import store from './../store'
 
-const s = new ScrollInk(config)
-
-const subscribe = (html) => {
-    console.log(html)
-}
-
-const templates = [
-    {
-        path: '/',
-        name: 'Posts',
-        template: ({ data }) => s.list(data, { minimiseContent: true, viewFilter: ['title', 'content', 'publishData'] }),
-        fetch: (shaai, store, params) => {
-            return new Promise(res => {
-                if(store.getData('posts')) {
-                    res(store.getData('posts'))
+export default (key) => {
+    switch (key) {
+        case 'title':
+            return {
+                tag: 'h1',
+                className: 'post-title',
+                events: [{
+                    name: 'click',
+                    handler: (e, data, config) => {
+                        if (config.history && config.basePath) {
+                            if (store.getData('currentPath') !== `/post/${data.publicUrl || data._id}`) history().push(`${config.basePath}/post/${data.publicUrl || data._id}`)
+                        } else {
+                            if (store.getData('currentPath') !== `/post/${data.publicUrl || data._id}`) history().push(`/post/${data.publicUrl || data._id}`)
+                        }
+                        window.scrollTo(0, 0)
+                    }
+                }]
+            }
+        case 'subtitle':
+            return {
+                tag: 'p',
+                className: 'post-subtitle'
+            }
+        case 'content':
+            return {
+                tag: 'div',
+                className: 'post-content'
+            }
+        case 'publishData':
+        case 'modified':
+            return {
+                tag: 'div',
+                className: 'post-publishedDate',
+                transform: (date) => {
+                    return new Date(date).toDateString()
                 }
-                shaai.getBlogs().then(data => {
-                    store.setData({ posts: data.items })
-                    res(data.items)
-                })
-            })
-        }
-    },
-    {
-        path: '/post/:id',
-        name: 'Single Post',
-        template: ({ data }) => s.one(data, { minimiseContent: false, viewFilter: ['title', 'content', 'publishData'] }),
-        fetch: (shaai, store, params) => {
-            if(store.getData('posts')) {
-                return new Promise(res => res(store.getData('posts').filter(p => p.guid.split('/p/')[1] === params[1])))
-            } else return new Promise(res => shaai.getBlogs().then(data => res(data.items.filter(p => p.guid.split('/p/')[1] === params[1]))))
-        }
-    },
-    {
-        path: '/about',
-        name: 'About',
-        template: ({ config }) => {
-            let html = `
-                <div>
-                    <h4 class="about-heading">About me</h4>
-                    <p class="about-content">Hello there! I am <a href="https://github.com/mohtik05">@mohitk05</a></p>
-                </div>
-            `
-            let about = document.createElement('div')
-            about.className = 'about'
-            about.innerHTML = html
-
-            return about
-        }
+            }
+        case 'link':
+            return {
+                tag: 'a',
+                className: 'post-a-link'
+            }
+        case 'image':
+            return {
+                tag: 'img',
+                className: 'post-img'
+            }
+        case 'coverImage':
+            return {
+                tag: 'img',
+                className: 'post-cover-img'
+            }
+        default:
+            return {
+                tag: 'div'
+            }
     }
-]
-
-const init = () => {
-    console.log('load')
-    s.load(templates)
-    s.subscribe(subscribe)
 }
-
-init()

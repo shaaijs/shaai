@@ -4,23 +4,23 @@ import history from './history'
 import store from './store'
 
 let d = window.document
-export const list = (data, options = { minimiseContent: true }) => {
+export const list = (data, options = { minimiseContent: true }, config) => {
     if(!data) throw Error(`Data needs to be an Array. Got ${data}.`)
     let list_root = d.createElement('div')
     list_root.className = 'blog-list'
     for(let i = 0; i < data.length; i++) {
         let current = data[i]
-        let currentElement = fillListElement(d.createElement('div'), current, options)
+        let currentElement = fillListElement(d.createElement('div'), current, options, config)
         list_root.appendChild(currentElement)
     }
     return list_root
 }
 
-export const one = (data, options = { minimiseContent: false }) => {
-    return list(data, options)
+export const one = (data, options = { minimiseContent: false }, config) => {
+    return list(data, options, config)
 }
 
-export const fillListElement = (el, data, { minimiseContent = true, viewFilter }) => {
+export const fillListElement = (el, data, { minimiseContent = true, viewFilter }, config) => {
     let element = {}
     let dataKeys = viewFilter && viewFilter.length ? Object.keys(data).filter(k => viewFilter.indexOf(k) > -1).sort((a, b) => {
         return viewFilter.indexOf(a) - viewFilter.indexOf(b)
@@ -40,7 +40,7 @@ export const fillListElement = (el, data, { minimiseContent = true, viewFilter }
                 element[key].textContent = elementConfig.transform ? elementConfig.transform(data[key]) : data[key]
         }
 
-        elementConfig.events && elementConfig.events.length && (element[key] = bind(element[key], elementConfig.events, data))
+        elementConfig.events && elementConfig.events.length && (element[key] = bind(element[key], elementConfig.events, data, config))
         element[key].className = elementConfig.className
         el.appendChild(element[key])
     })
