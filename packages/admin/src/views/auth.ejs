@@ -1,0 +1,98 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage - Shaai</title>
+</head>
+<!-- UI Kit Library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/css/uikit.min.css" />
+<link href="https://fonts.googleapis.com/css?family=Karla&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit-icons.min.js"></script>
+<style>
+body {
+    font-family: 'Karla', sans-serif
+}
+.login-title {
+    font-family: 'Karla', sans-serif;
+    margin-top: 10px;
+}
+form {
+    min-width: 300px;
+}
+.image {
+    width: 90px;
+    display: block;
+}
+</style>
+
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;">
+    <img class="image" src="https://i.imgur.com/84eLRd5.jpg">
+    <h1 class="login-title">Shaai - <%- pageType.slice(0, 1).toUpperCase() + pageType.slice(1, pageType.length) %></h1>
+    <form>
+        <div class="uk-margin">
+            <div class="uk-form-controls">
+                <input id="input-field-username" class="uk-input" id="author" type="text" placeholder="Username">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <div class="uk-form-controls">
+                <input id="input-field-password" class="uk-input" id="author" type="password" placeholder="Password">
+            </div>
+        </div>
+
+        <% if(pageType == 'signup'){ %>
+        <div class="uk-margin">
+            <div class="uk-form-controls">
+                <input id="input-field-confirm-username" class="uk-input" id="author" type="password" placeholder="Confirm password">
+            </div>
+        </div>
+        <% }%>
+
+        <p class="uk-margin">
+            <button id="submitButton" class="uk-button uk-button-primary" style="margin: auto;display:block;width:50%"><%- pageType %></button>
+        </p>
+        
+        <% if(pageType == 'login'){ %>
+            <p style="text-align: center; width: 100%"><a href="/signup">Don't have an account yet? Signup here.</a></p>
+        <% }%>
+
+        <% if(pageType == 'signup'){ %>
+            <p style="text-align: center; width: 100%"><a href="/login">← Go home</a></p>
+        <% }%>
+        <p style="position: absolute;text-align: center; width: 100vw; left: 0; bottom: 10"><a href="https://shaaijs.tech">Shaai Homepage</a> • <a href="https://github.com/shaaijs">GitHub</a></p>
+    </form>
+</div>
+
+<script>
+    window.onload = (ev => {
+        let blogCode = localStorage.getItem('blogCode')
+        if (blogCode)
+            window.open(`/blogs/${blogCode}`, '_self');
+        const submitButton = document.getElementById('submitButton')
+        submitButton.onclick = (ev => {
+            ev.preventDefault()
+            const username = document.getElementById('input-field-username')
+            const password = document.getElementById('input-field-password')
+            const confirmUsername = document.getElementById('input-field-confirm-username')
+
+            if (confirmUsername && confirmUsername.value != password.value)
+                return alert('password mismatch')
+            fetch(`/${confirmUsername ? 'signup' : 'login'}`, {
+                method: 'post',
+                body: JSON.stringify({
+                    username: username.value,
+                    password: password.value
+                }),
+                headers: new Headers({ 'content-type': 'application/json' }),
+            }).then(function (response) {
+                return response.json();
+            }).then(function (res) {
+                if (res.data) {
+                    window.open(`/blogs/${res.data.blogCode}`, '_self');
+                    localStorage.setItem('userToken', res.data.userToken)
+                    localStorage.setItem('blogCode', res.data.blogCode)
+                }
+            });
+        })
+    })
+
+</script>

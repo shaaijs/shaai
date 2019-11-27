@@ -1,0 +1,126 @@
+<head>
+    <title>Your blogs - Shaai</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<link href="https://fonts.googleapis.com/css?family=Karla&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/css/uikit.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit-icons.min.js"></script>
+<style>
+    body,
+    .title,
+    h1 {
+        font-family: 'Karla', sans-serif
+    }
+
+    .card {
+        width: 32%;
+        padding: 30px;
+        margin: 0;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        transition: all 200ms ease-in-out;
+        border: 2px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    }
+
+    .card:hover {
+        cursor: pointer;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, .08);
+        border: 2px solid rgba(0, 0, 0, .1)
+    }
+
+    .grid {
+        display: flex;
+        flex-wrap: wrap
+    }
+
+    .steps-to-follow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 70vh;
+    }
+
+    p,
+    h3 {
+        margin: 0;
+    }
+
+    .blog-title {
+        margin-bottom: 5px;
+    }
+
+    .description {
+        margin-bottom: 10px;
+    }
+
+    .initial-card {
+        width: 400px;
+    }
+
+    .initial-card h1 {
+        margin: 0
+    }
+
+    .initial-card::before {
+        content: none
+    }
+
+    .initial-card::after {
+        content: none
+    }
+
+    @media only screen and (max-width: 768px) {
+        .card {
+            width: 100%;
+        }
+
+        .initial-card {
+            width: auto;
+            max-width: 400px
+        }
+    }
+</style>
+<div style="position:fixed;right:0px;margin:10px;z-index: 9;">
+    <span style="margin-right:10px" id="blog-code"></span>
+    <button class="uk-button uk-button-primary" onclick="window.open('/blog','_self')">NEW POST</button>
+    <button class="uk-button uk-button-secondary" id="logout-btn">LOGOUT</button>
+</div>
+<div class="uk-padding-large" style="padding-top:100px">
+    <% if(!data || data.length<=0){ %>
+    <div class="steps-to-follow">
+        <div class="uk-card uk-card-body uk-card-default initial-card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 class="uk-card-title">What to do next?</h1>
+                <p>· <a href="https://shaaijs.tech/blog" target="_blank">Integrate the blog</a> to your website.</p>
+                <p>· Create a <a href="/blog">new blog post</a>.</p>
+            </div>
+            <div style="font-size: 60px;">
+                🖋
+            </div>
+        </div>
+    </div>
+    <% }else{ %>
+    <h1 class="title">My posts</h1>
+    <div class="grid">
+        <% data.forEach(function(blog){ %>
+        <div class="uk-card uk-card-body uk-card-default card" onclick="window.open('/blog/<%- blog.id %>','_self')">
+            <h3 class="title blog-title"><%-blog.title%></h3>
+            <p class="description"><%-blog.subtitle%></p>
+            <p><%-blog.modified.toString().slice(4, 21)%></p>
+        </div>
+        <% }); %>
+    </div>
+    <% } %>
+</div>
+<script>
+    window.onload = ev => {
+        document.getElementById("logout-btn").onclick = ev => {
+            localStorage.clear();
+            window.open('/', '_self')
+        }
+        document.getElementById('blog-code').innerHTML = `<strong>Blog Code:</strong> ${localStorage.getItem('blogCode')}`
+    }
+</script>
