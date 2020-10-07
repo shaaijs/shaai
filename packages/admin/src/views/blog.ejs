@@ -1,0 +1,172 @@
+<head>
+    <script src="/plugins/ckeditor/ckeditor.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%- data.title %></title>
+    <link href="https://fonts.googleapis.com/css?family=Karla&display=swap" rel="stylesheet">
+    <style>
+        body,
+        .title {
+            font-family: 'Karla', sans-serif
+        }
+
+        .title {
+            margin-top: 0;
+        }
+
+        #goBack {
+            transition: color 200ms ease-in-out;
+            margin: 0;
+            font-size: 20px;
+        }
+
+        #goBack:hover {
+            color: cornflowerblue;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<div style="position:fixed;right:0px;margin:10px">
+    <button class="uk-button uk-button-secondary" id="logout-btn">LOGOUT</button>
+</div>
+<form class="uk-form-stacked uk-padding-large">
+    <p id="goBack">← Go back</p>
+    <% if(data.title){ %>
+    <h3 class="title"><%- data.title %></h3>
+    <% }%>
+    <% if(!data.title){ %>
+    <h3 class="title">New post</h3>
+    <% }%>
+    <div class="uk-margin <%- id?'':'uk-hidden' %>">
+        <label class="uk-form-label" for="id">ID</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="id" type="text" value="<%- id %>" disabled>
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="title">Title</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="title" type="text" value="<%- data.title %>" placeholder="Shaai is beautiful">
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="title">Subtitle</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="subtitle" type="text" value="<%- data.subtitle %>" placeholder="A pluggable blog to ease your life">
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="title">Author</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="author" type="text" value="<%- data.author %>" placeholder="Kay">
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <label class="uk-form-label" for="title">Cover Image URL</label>
+        <div class="uk-form-controls">
+            <input class="uk-input" id="coverImage" type="text" value="<%- data.coverImage %>" placeholder="Image URL">
+        </div>
+    </div>
+
+    <div id="editor">
+        <%- data.content %>
+    </div>
+
+    <p uk-margin>
+        <div style="display: flex">
+            <button style="margin-right: 10px" id="submitButton" class="uk-button uk-button-primary">SAVE</button>
+            <button id="deleteButton" class="uk-button uk-button-danger">DELETE</button>
+        </div>
+        <span id="saveStatus"></span>
+    </p>
+</form>
+
+<!-- UI Kit Library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/css/uikit.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit-icons.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/blog.css">
+
+
+<script>
+    let url = '<%= JSON.stringify(data.user) %>'
+    let form = {};
+    let blogId
+    let blogCode = '<%= data.user && data.user.blogCode %>'
+    window.onload = () => {
+        blogId = document.getElementById('id').value
+        // CKEDITOR.config.toolbar = [
+        //     { name: 'document', items: ['Source', '-', 'NewPage', 'Preview', '-', 'Templates'] },
+        //     { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo'] },
+        //     // '/',
+        //     { name: 'basicstyles', items: ['Bold', 'Italic'] },
+        //     { name: 'coding', items: ['Code', 'Image', 'Iframe'] },
+        // ];
+        CKEDITOR.replace('editor')
+
+        document.getElementById("logout-btn").onclick = ev => {
+            localStorage.clear();
+            window.open('/', '_self')
+        }
+        let submitButton = document.getElementById("submitButton")
+        let saveStatus = document.getElementById("saveStatus")
+
+        submitButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            saveStatus.innerHTML = 'SAVING...'
+            const userToken = localStorage.getItem('userToken')
+            form.content = CKEDITOR.instances.editor.getData();
+            form.title = document.getElementById('title').value;
+            form.subtitle = document.getElementById('subtitle').value;
+            form.author = document.getElementById('author').value;
+            form.coverImage = document.getElementById('coverImage').value;
+            fetch(`/blog/${blogId || ''}`, {
+                method: blogId ? 'put' : 'post',
+                body: JSON.stringify({ form, userToken }),
+                headers: new Headers({ 'content-type': 'application/json' }),
+            }).then(function (response) {
+                return response.json();
+            }).then(function (res) {
+                saveStatus.innerHTML = 'SAVED'
+                if (res.data._id && !blogId) {
+                    blogId = res.data._id;
+                    document.getElementById('id').value = blogId;
+                    window.location = `/blog/${blogId}`
+                }
+            }).catch(() => {
+                saveStatus.innerHTML = 'FAILED TO SAVE'
+            });
+        });
+
+        let deleteButton = document.getElementById('deleteButton')
+        deleteButton.addEventListener('click', (e) => {
+            e.preventDefault()
+            saveStatus.innerHTML = 'DELETING...'
+            fetch(`/blog/${blogId}`, {
+                method: 'delete',
+                headers: new Headers({ 'content-type': 'application/json' }),
+            }).then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        saveStatus.innerHTML = 'DELETED'
+                        window.location = `/blogs/${res.blogCode}`
+                    } else {
+                        saveStatus.innerHTML = 'FAILED TO DELETE'
+                    }
+                }).catch(() => {
+                    saveStatus.innerHTML = 'FAILED TO DELETE'
+                })
+        })
+
+        let goBack = document.getElementById('goBack')
+        goBack.addEventListener('click', (e) => {
+            e.preventDefault()
+            if (blogCode) {
+                window.location.href = `/blogs/${blogCode}`
+            } else {
+                window.history.back()
+            }
+        })
+    }
+</script>
