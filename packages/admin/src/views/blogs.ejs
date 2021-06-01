@@ -113,10 +113,6 @@
 </div>
 <script>
     window.onload = ev => {
-        document.getElementById("logout-btn").onclick = ev => {
-            localStorage.clear();
-            window.open('/', '_self')
-        }
         const blogCode = localStorage.getItem('blogCode');
         if(blogCode) {
             document.getElementById('page-header').innerHTML = `
@@ -127,6 +123,10 @@
             </div>
             `
             document.getElementById('page-title').innerHTML = `${localStorage.getItem('username')}'s blogs`
+            document.getElementById("logout-btn").onclick = ev => {
+                localStorage.clear();
+                window.open('/', '_self')
+            }
         }
     }
 </script>
