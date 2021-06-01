@@ -19,10 +19,7 @@ router.get('/api/blogs/:blogCode', async function (req, res, next) {
 
 router.get('/blog/:id?', async function (req, res, next) {
   let id = req.params.id
-  const data = await blogsController.get(id) || {}
-  res.render('blog', {
-    data, id
-  });
+  res.render('blog', { id  });
 });
 
 router.get('/blog-edit/:id?', async function (req, res, next) {
