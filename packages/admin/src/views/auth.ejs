@@ -90,6 +90,7 @@ form {
                     window.open(`/blogs/${res.data.blogCode}`, '_self');
                     localStorage.setItem('userToken', res.data.userToken)
                     localStorage.setItem('blogCode', res.data.blogCode)
+                    localStorage.setItem('username', res.data.username)
                 }
             });
         })

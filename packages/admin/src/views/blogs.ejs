@@ -83,11 +83,7 @@
         }
     }
 </style>
-<div style="position:fixed;right:0px;margin:10px;z-index: 9;">
-    <span style="margin-right:10px" id="blog-code"></span>
-    <button class="uk-button uk-button-primary" onclick="window.open('/blog','_self')">NEW POST</button>
-    <button class="uk-button uk-button-secondary" id="logout-btn">LOGOUT</button>
-</div>
+<div id="page-header"></div>
 <div class="uk-padding-large" style="padding-top:100px">
     <% if(!data || data.length<=0){ %>
     <div class="steps-to-follow">
@@ -103,7 +99,7 @@
         </div>
     </div>
     <% }else{ %>
-    <h1 class="title">My posts</h1>
+    <h1 class="title" id="page-title">My blogs</h1>
     <div class="grid">
         <% data.forEach(function(blog){ %>
         <div class="uk-card uk-card-body uk-card-default card" onclick="window.open('/blog/<%- blog.id %>','_self')">
@@ -121,6 +117,16 @@
             localStorage.clear();
             window.open('/', '_self')
         }
-        document.getElementById('blog-code').innerHTML = `<strong>Blog Code:</strong> ${localStorage.getItem('blogCode')}`
+        const blogCode = localStorage.getItem('blogCode');
+        if(blogCode) {
+            document.getElementById('page-header').innerHTML = `
+            <div style="position:fixed;right:0px;margin:10px;z-index: 9;">
+                <span style="margin-right:10px" id="blog-code"><strong>Blog Code:</strong> ${blogCode}</span>
+                <button class="uk-button uk-button-primary" onclick="window.open('/blog','_self')">NEW POST</button>
+                <button class="uk-button uk-button-secondary" id="logout-btn">LOGOUT</button>
+            </div>
+            `
+            document.getElementById('page-title').innerHTML = `${localStorage.getItem('username')}'s blogs`
+        }
     }
 </script>

@@ -70,4 +70,8 @@ router.post('/signup', async function (req, res, next) {
   res.json({ data });
 });
 
+router.get('/u/:blogName', async function (req, res, next) {
+  res.render('blog');
+});
+
 module.exports = router;
