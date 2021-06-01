@@ -36,36 +36,36 @@
         let blogCode = '<%= data.user && data.user.blogCode %>'
         if(!blogCode)  {
             alert('No blog');
-            return;
-        }
-        let s = new ScrollInk({
-            source: {
-                name: 'CMS',
-                config: {
-                    blogCode
-                }
-            },
-            basePath: '/blog',
-            root: 'shaai_root',
-            postPreviewSize: 100,
-            blogHeader: {
-                title: `Shaai - Blog`
-            },
-            profile: {
-                image: 'https://i.imgur.com/p0yklHL.jpg',
-                title: 'Mohit Karekar',
-                bio: 'Writing Shaai at the moment.'
-            },
-            globalHeader: true,
-            globalNav: true,
-            globalProfile: true
-        })
-        window.onload = function() {
-            s.load()
-            s.subscribe(function(dom) {
-                document.getElementById('root').innerHTML = ''
-                document.getElementById('root').append(dom)
+        } else{
+            let s = new ScrollInk({
+                source: {
+                    name: 'CMS',
+                    config: {
+                        blogCode
+                    }
+                },
+                basePath: '/blog',
+                root: 'shaai_root',
+                postPreviewSize: 100,
+                blogHeader: {
+                    title: `Shaai - Blog`
+                },
+                profile: {
+                    image: 'https://i.imgur.com/p0yklHL.jpg',
+                    title: 'Mohit Karekar',
+                    bio: 'Writing Shaai at the moment.'
+                },
+                globalHeader: true,
+                globalNav: true,
+                globalProfile: true
             })
+            window.onload = function() {
+                s.load()
+                s.subscribe(function(dom) {
+                    document.getElementById('root').innerHTML = ''
+                    document.getElementById('root').append(dom)
+                })
+            }
         }
     </script>
 </body>
