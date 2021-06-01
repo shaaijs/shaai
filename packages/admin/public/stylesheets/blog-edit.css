@@ -1,0 +1,19 @@
+body,
+.title {
+    font-family: 'Karla', sans-serif
+}
+
+.title {
+    margin-top: 0;
+}
+
+#goBack {
+    transition: color 200ms ease-in-out;
+    margin: 0;
+    font-size: 20px;
+}
+
+#goBack:hover {
+    color: cornflowerblue;
+    cursor: pointer;
+}

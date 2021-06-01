@@ -1,172 +1,72 @@
+<!DOCTYPE html>
 <head>
-    <script src="/plugins/ckeditor/ckeditor.js"></script>
+    <meta charset="UTF-8">
+    <meta name="description" content="Create amazing blogs ">
+    <meta name="keywords" content="Blogging,Shaai,Blog,Javascript,npm,publishing,cms">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%- data.title %></title>
-    <link href="https://fonts.googleapis.com/css?family=Karla&display=swap" rel="stylesheet">
-    <style>
-        body,
-        .title {
-            font-family: 'Karla', sans-serif
-        }
+    <meta name="theme-color" content="#16161d" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shaaijs" />
+    <meta property="og:title" content="Shaai - A pluggable blogging framework" />
+    <meta property="og:description" content="Create amazing new blogs or integrate them into your existing websites using Shaai. It is open source and completely pluggable." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://shaaijs.tech" />
+    <meta property="og:image:width" content="900" />
+    <meta property="og:image:height" content="450" />
+    <meta property="og:image" content="https://i.imgur.com/NHIuyZN.pngg" />
+    <title>Shaai - A pluggable blogging framework</title>
+    <link rel="shortcut icon" type="image/png" href="https://i.imgur.com/84eLRd5s.jpg" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/@shaai/scroll-ink/dist/main.css">
+    <script src="https://unpkg.com/@shaai/scroll-ink/dist/main.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145877885-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-        .title {
-            margin-top: 0;
-        }
+    gtag('config', 'UA-145877885-1');
+    </script>
 
-        #goBack {
-            transition: color 200ms ease-in-out;
-            margin: 0;
-            font-size: 20px;
-        }
-
-        #goBack:hover {
-            color: cornflowerblue;
-            cursor: pointer;
-        }
-    </style>
 </head>
-<div style="position:fixed;right:0px;margin:10px">
-    <button class="uk-button uk-button-secondary" id="logout-btn">LOGOUT</button>
-</div>
-<form class="uk-form-stacked uk-padding-large">
-    <p id="goBack">← Go back</p>
-    <% if(data.title){ %>
-    <h3 class="title"><%- data.title %></h3>
-    <% }%>
-    <% if(!data.title){ %>
-    <h3 class="title">New post</h3>
-    <% }%>
-    <div class="uk-margin <%- id?'':'uk-hidden' %>">
-        <label class="uk-form-label" for="id">ID</label>
-        <div class="uk-form-controls">
-            <input class="uk-input" id="id" type="text" value="<%- id %>" disabled>
-        </div>
-    </div>
-    <div class="uk-margin">
-        <label class="uk-form-label" for="title">Title</label>
-        <div class="uk-form-controls">
-            <input class="uk-input" id="title" type="text" value="<%- data.title %>" placeholder="Shaai is beautiful">
-        </div>
-    </div>
-    <div class="uk-margin">
-        <label class="uk-form-label" for="title">Subtitle</label>
-        <div class="uk-form-controls">
-            <input class="uk-input" id="subtitle" type="text" value="<%- data.subtitle %>" placeholder="A pluggable blog to ease your life">
-        </div>
-    </div>
-    <div class="uk-margin">
-        <label class="uk-form-label" for="title">Author</label>
-        <div class="uk-form-controls">
-            <input class="uk-input" id="author" type="text" value="<%- data.author %>" placeholder="Kay">
-        </div>
-    </div>
-
-    <div class="uk-margin">
-        <label class="uk-form-label" for="title">Cover Image URL</label>
-        <div class="uk-form-controls">
-            <input class="uk-input" id="coverImage" type="text" value="<%- data.coverImage %>" placeholder="Image URL">
-        </div>
-    </div>
-
-    <div id="editor">
-        <%- data.content %>
-    </div>
-
-    <p uk-margin>
-        <div style="display: flex">
-            <button style="margin-right: 10px" id="submitButton" class="uk-button uk-button-primary">SAVE</button>
-            <button id="deleteButton" class="uk-button uk-button-danger">DELETE</button>
-        </div>
-        <span id="saveStatus"></span>
-    </p>
-</form>
-
-<!-- UI Kit Library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/css/uikit.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/js/uikit-icons.min.js"></script>
-
-<link rel="stylesheet" type="text/css" href="/stylesheets/blog.css">
-
-
-<script>
-    let url = '<%= JSON.stringify(data.user) %>'
-    let form = {};
-    let blogId
-    let blogCode = '<%= data.user && data.user.blogCode %>'
-    window.onload = () => {
-        blogId = document.getElementById('id').value
-        // CKEDITOR.config.toolbar = [
-        //     { name: 'document', items: ['Source', '-', 'NewPage', 'Preview', '-', 'Templates'] },
-        //     { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo'] },
-        //     // '/',
-        //     { name: 'basicstyles', items: ['Bold', 'Italic'] },
-        //     { name: 'coding', items: ['Code', 'Image', 'Iframe'] },
-        // ];
-        CKEDITOR.replace('editor')
-
-        document.getElementById("logout-btn").onclick = ev => {
-            localStorage.clear();
-            window.open('/', '_self')
+<body>
+    <div id="root"><div style="margin: auto; width: 90vw; height: 100vh; display: flex; justify-content: center; align-items: center"><p>💆‍♀️Loading...</p></div></div>
+    <script>
+        let blogCode = '<%= data.user && data.user.blogCode %>'
+        if(!blogCode)  {
+            alert('No blog');
+            return;
         }
-        let submitButton = document.getElementById("submitButton")
-        let saveStatus = document.getElementById("saveStatus")
-
-        submitButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            saveStatus.innerHTML = 'SAVING...'
-            const userToken = localStorage.getItem('userToken')
-            form.content = CKEDITOR.instances.editor.getData();
-            form.title = document.getElementById('title').value;
-            form.subtitle = document.getElementById('subtitle').value;
-            form.author = document.getElementById('author').value;
-            form.coverImage = document.getElementById('coverImage').value;
-            fetch(`/blog/${blogId || ''}`, {
-                method: blogId ? 'put' : 'post',
-                body: JSON.stringify({ form, userToken }),
-                headers: new Headers({ 'content-type': 'application/json' }),
-            }).then(function (response) {
-                return response.json();
-            }).then(function (res) {
-                saveStatus.innerHTML = 'SAVED'
-                if (res.data._id && !blogId) {
-                    blogId = res.data._id;
-                    document.getElementById('id').value = blogId;
-                    window.location = `/blog/${blogId}`
+        let s = new ScrollInk({
+            source: {
+                name: 'CMS',
+                config: {
+                    blogCode
                 }
-            }).catch(() => {
-                saveStatus.innerHTML = 'FAILED TO SAVE'
-            });
-        });
-
-        let deleteButton = document.getElementById('deleteButton')
-        deleteButton.addEventListener('click', (e) => {
-            e.preventDefault()
-            saveStatus.innerHTML = 'DELETING...'
-            fetch(`/blog/${blogId}`, {
-                method: 'delete',
-                headers: new Headers({ 'content-type': 'application/json' }),
-            }).then(res => res.json())
-                .then(res => {
-                    if (res.success) {
-                        saveStatus.innerHTML = 'DELETED'
-                        window.location = `/blogs/${res.blogCode}`
-                    } else {
-                        saveStatus.innerHTML = 'FAILED TO DELETE'
-                    }
-                }).catch(() => {
-                    saveStatus.innerHTML = 'FAILED TO DELETE'
-                })
+            },
+            basePath: '/blog',
+            root: 'shaai_root',
+            postPreviewSize: 100,
+            blogHeader: {
+                title: `Shaai - Blog`
+            },
+            profile: {
+                image: 'https://i.imgur.com/p0yklHL.jpg',
+                title: 'Mohit Karekar',
+                bio: 'Writing Shaai at the moment.'
+            },
+            globalHeader: true,
+            globalNav: true,
+            globalProfile: true
         })
-
-        let goBack = document.getElementById('goBack')
-        goBack.addEventListener('click', (e) => {
-            e.preventDefault()
-            if (blogCode) {
-                window.location.href = `/blogs/${blogCode}`
-            } else {
-                window.history.back()
-            }
-        })
-    }
-</script>
+        window.onload = function() {
+            s.load()
+            s.subscribe(function(dom) {
+                document.getElementById('root').innerHTML = ''
+                document.getElementById('root').append(dom)
+            })
+        }
+    </script>
+</body>
+</html>

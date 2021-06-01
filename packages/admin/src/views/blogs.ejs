@@ -91,7 +91,7 @@
             <div>
                 <h1 class="uk-card-title">What to do next?</h1>
                 <p>· <a href="https://shaaijs.tech/blog" target="_blank">Integrate the blog</a> to your website.</p>
-                <p>· Create a <a href="/blog">new blog post</a>.</p>
+                <p>· Create a <a href="/blog-edit">new blog post</a>.</p>
             </div>
             <div style="font-size: 60px;">
                 🖋
@@ -102,7 +102,7 @@
     <h1 class="title" id="page-title">My blogs</h1>
     <div class="grid">
         <% data.forEach(function(blog){ %>
-        <div class="uk-card uk-card-body uk-card-default card" onclick="window.open('/blog/<%- blog.id %>','_self')">
+        <div class="uk-card uk-card-body uk-card-default card" onclick="window.open('/blog-edit/<%- blog.id %>','_self')">
             <h3 class="title blog-title"><%-blog.title%></h3>
             <p class="description"><%-blog.subtitle%></p>
             <p><%-blog.modified.toString().slice(4, 21)%></p>

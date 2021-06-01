@@ -25,6 +25,14 @@ router.get('/blog/:id?', async function (req, res, next) {
   });
 });
 
+router.get('/blog-edit/:id?', async function (req, res, next) {
+  let id = req.params.id
+  const data = await blogsController.get(id) || {}
+  res.render('blog-edit', {
+    data, id
+  });
+});
+
 router.delete('/blog/:id', async function (req, res, next) {
   const data = await blogsController.remove(req.params.id)
   res.json({
