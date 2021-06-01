@@ -1,61 +1,41 @@
-import history from './../history'
-import store from './../store'
+const Blog = require('./../db/models/blog')
+const User = require('./../db/models/user')
+const urlGenerator = require('./../utils/urlGenerator')
 
-export default (key) => {
-    switch (key) {
-        case 'title':
-            return {
-                tag: 'h1',
-                className: 'post-title',
-                events: [{
-                    name: 'click',
-                    handler: (e, data, config) => {
-                        if (config.history && config.basePath) {
-                            if (store.getData('currentPath') !== `/post/${data.publicUrl || data._id}`) history().push(`${config.basePath}/post/${data.publicUrl || data._id}`)
-                        } else {
-                            if (store.getData('currentPath') !== `/post/${data.publicUrl || data._id}`) history().push(`/post/${data.publicUrl || data._id}`)
-                        }
-                        window.scrollTo(0, 0)
-                    }
-                }]
-            }
-        case 'subtitle':
-            return {
-                tag: 'p',
-                className: 'post-subtitle'
-            }
-        case 'content':
-            return {
-                tag: 'div',
-                className: 'post-content'
-            }
-        case 'publishData':
-        case 'modified':
-            return {
-                tag: 'div',
-                className: 'post-publishedDate',
-                transform: (date) => {
-                    return new Date(date).toDateString()
-                }
-            }
-        case 'link':
-            return {
-                tag: 'a',
-                className: 'post-a-link'
-            }
-        case 'image':
-            return {
-                tag: 'img',
-                className: 'post-img'
-            }
-        case 'coverImage':
-            return {
-                tag: 'img',
-                className: 'post-cover-img'
-            }
-        default:
-            return {
-                tag: 'div'
-            }
+module.exports = {
+    getAll: async (blogCode, limit) => {
+        const user = await User.findOne({ blogCode })
+        if (!user) return { success: false }
+        return await Blog.find({ userId: user._id }, { userId: 0 }).limit(limit).sort({ modified: -1 })
+    },
+    get: async (blogId) => {
+        return await Blog.findById(blogId).then(async blog => {
+            if (blog) {
+                let user = await User.findById(blog.userId)
+                let { userId, ...rest } = blog._doc
+                return { ...rest, user }
+            } else return { success: false }
+        })
+    },
+    create: async (userToken, blog) => {
+        const user = await User.findOne({ userToken })
+        if (!user) return { success: false }
+        blog['userId'] = user._id
+        const b = await Blog.create(blog)
+        const url = urlGenerator(b._id, b._doc.title)
+        const updatedBlog = await Blog.findByIdAndUpdate(b._id, { publicUrl: url }, { new: true })
+        return { success: true, ...updatedBlog }
+    },
+    edit: async (userToken, blogId, blog) => {
+        const user = await User.findOne({ userToken })
+        if (!user) return { success: false }
+        const b = await Blog.findByIdAndUpdate(blogId, blog)
+        return { success: true, ...b._doc }
+    },
+    remove: async (blogId) => {
+        return await Blog.findByIdAndRemove(blogId).then(async (blog) => {
+            if (!blog) return { success: false }
+            return await User.findById(blog.userId)
+        })
     }
 }
