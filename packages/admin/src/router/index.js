@@ -17,7 +17,7 @@ router.get('/api/blogs/:blogCode', async function (req, res, next) {
   res.json(data);
 });
 
-router.get('/blog/:id?', async function (req, res, next) {
+router.get('/u/:id?', async function (req, res, next) {
   let id = req.params.id
   const data = await blogsController.get(id) || {}
   res.render('blog', {
