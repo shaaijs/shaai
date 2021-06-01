@@ -33,15 +33,14 @@
 <body>
     <div id="root"><div style="margin: auto; width: 90vw; height: 100vh; display: flex; justify-content: center; align-items: center"><p>💆‍♀️Loading...</p></div></div>
     <script>
-        let blogCode = '<%= data.user && data.user.blogCode %>'
-        if(!blogCode)  {
+        if(!id)  {
             alert('No blog');
         } else{
             let s = new ScrollInk({
                 source: {
                     name: 'CMS',
                     config: {
-                        blogCode
+                        blogCode: id
                     }
                 },
                 basePath: '/blog',
